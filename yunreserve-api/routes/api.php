@@ -40,3 +40,8 @@ Route::namespace("Api")->prefix('website')->group(function(){
     Route::get('/verifyAccount/{account}/{verifyCode}',"websiteController@verifyAccount");
     Route::post('/forgetAccount',"websiteController@forgetAccount");
 });
+
+
+Route::namespace("Api")->prefix('cash')->group(function(){
+    Route::post("/linePay","cashFlowController@Linepay");
+});

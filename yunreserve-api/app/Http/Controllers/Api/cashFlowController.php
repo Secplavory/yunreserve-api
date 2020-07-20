@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Taiwan_pay;
 use \SimpleXMLElement;
+use Illuminate\Support\Facades\Http;
 
 class cashFlowController extends Controller
 {
@@ -122,5 +123,35 @@ class cashFlowController extends Controller
         }
         header("Location: https://sinshengcci.com/");
         exit();
+    }
+
+    public function Linepay(Request $request)
+    {
+        $securityCode = $request->input("securityCode");
+        if(strcmp($securityCode, "OFA82497653@")!=0){
+            return "-99";
+        }
+        $channelId = "1654369976";
+        $channelSecretKey = "9355ac37b618433e1dc397a52f6e31f8";
+        $product_name = $request->input("product_name");
+        $product_amt = $request->input("product_amt");
+        $currency = "TWD";
+        $orderId = $request->input("orderId");
+        $oneTimeKey = $request->input("oneTimeKey");
+
+        $target_url = "https://api-pay.line.me/v2/payments/oneTimeKeys/pay";
+
+        $response = Http::withHeaders([
+            "Content-Type"=>"application/json;charset=UTF-8",
+            "X-LINE-ChannelId"=>$channelId,
+            "X-LINE-ChannelSecret"=>$channelSecretKey
+        ])->post($target_url, [
+            "productName"=>$product_name,
+            "amount"=>$product_amt,
+            "currency"=>$currency,
+            "orderId"=>$orderId,
+            "oneTimeKey"=>$oneTimeKey
+        ]);
+        return $response;
     }
 }
