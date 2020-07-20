@@ -11,6 +11,9 @@ use App\Member;
 use App\Transaction;
 use App\Taiwan_pay;
 
+use Mail;
+
+
 class machineController extends Controller
 {
     //
@@ -159,7 +162,47 @@ class machineController extends Controller
         Transaction::create([
             "product_id" => $product->id
         ]);
+        $this->selled_notify($product);
         return "true";
+    }
+
+    public function selled_notify($product){
+        $from = [
+            "email"=>"yunreserve@gmail.com",
+            "name" =>"芯生文創",
+            "subject"=>"商品售出通知"
+        ];
+        $member = $product->member;
+        $receiver_email = $member->member_email;
+        $receiver_name = $member->member_name;
+        $receiver_bankCode = $member->member_bankCode;
+        $receiver_bankAccount = $member->member_bankAccount;
+        $to = [
+            "email"=>$receiver_email,
+            "name"=>$receiver_name
+        ];
+        $price = $product->product_price;
+        if($price<100){
+            $fee = 10;
+        }else if($price<1000){
+            $fee = $price * 0.1;
+        }else{
+            $fee = 100 + ($price - 1000)*0.05;
+        }
+        $fee = floor($fee);
+        $data = [
+            "bankCode"=>$receiver_bankCode,
+            "bankAccount"=>$receiver_bankAccount,
+            "product"=>$product->product_name,
+            "price"=>$price,
+            "fee"=>$fee,
+            "subject"=>"芯生文創－商品售出通知",
+            "msg"=>"販售金額將匯入銀行帳戶"
+        ];
+        Mail::send("emails.selled_seller", $data, function($message) use ($from, $to){
+            $message->from($from['email'], $from['name']);
+            $message->to($to['email'], $to['name'])->subject($from['subject']);
+        });
     }
 
 

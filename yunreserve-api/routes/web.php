@@ -18,6 +18,5 @@ Route::namespace("Api")->group(function(){
 });
 
 
-Route::get('/', functioN(){
-    return "123";
-});
+
+
