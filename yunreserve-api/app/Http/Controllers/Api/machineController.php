@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 use App\Channel;
 use App\Product;
 use App\Member;
 use App\Transaction;
 use App\Taiwan_pay;
+use App\Line_pay;
+use App\LinepayMethod;
 
 use Mail;
 
@@ -205,6 +208,59 @@ class machineController extends Controller
         });
     }
 
+    public function Linepay(Request $request)
+    {
+        $securityCode = $request->input("securityCode");
+        if(strcmp($securityCode, "OFA82497653@")!=0){
+            return "-99";
+        }
+        $channelId = "1654369976";
+        $channelSecretKey = "9355ac37b618433e1dc397a52f6e31f8";
+        $ch_box = Channel::find($request->input("channelId"));
+        $product_name = $ch_box->product->product_name;
+        $product_amt = $ch_box->product->product_price;
+        $currency = "TWD";
+        $orderId = $ch_box->product->id;
+        $oneTimeKey = $request->input("oneTimeKey");
+
+        $target_url = "https://api-pay.line.me/v2/payments/oneTimeKeys/pay";
+        $response = Http::withHeaders([
+            "Content-Type"=>"application/json;charset=UTF-8",
+            "X-LINE-ChannelId"=>$channelId,
+            "X-LINE-ChannelSecret"=>$channelSecretKey
+        ])->post($target_url, [
+            "productName"=>$product_name,
+            "amount"=>$product_amt,
+            "currency"=>$currency,
+            "orderId"=>$orderId,
+            "oneTimeKey"=>$oneTimeKey
+        ]);
+        if(strcmp($response["returnCode"], "0000")==0){
+            $linepay = Line_pay::create([
+                "returnCode"=>$response["returnCode"],
+                "returnMessage"=>$response["returnMessage"],
+                "transactionId"=>$response["info"]["transactionId"],
+                "orderId"=>$response["info"]["orderId"],
+                "transactionDate"=>$response["info"]["transactionDate"],
+                "balance"=>$response["info"]["balance"]
+            ]);
+            foreach($response["info"]["payInfo"] as $payInfo){
+                LinepayMethod::create([
+                    "method"=>$payInfo["method"],
+                    "amount"=>$payInfo["amount"],
+                    "line_pay_id"=>$linepay->id
+                ]);
+            }
+            $product = $ch_box->product;
+            $ch_box->product_id = "0";
+            $ch_box->save();
+            Transaction::create([
+                "product_id" => $product->id
+            ]);
+            $this->selled_notify($product);
+        }
+        return $response["returnCode"];
+    }
 
     // public function createChannels(){
 

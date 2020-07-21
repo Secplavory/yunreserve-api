@@ -30,6 +30,8 @@ Route::namespace("Api")->prefix('channel')->group(function(){
     Route::post('/recall', 'machineController@recall');
     Route::post('/productOwner', 'machineController@productOwner');
     Route::post('/checkPayment/TWpay',"machineController@check_TWpay");
+    Route::post("/linePay","machineController@Linepay");
+
     // Route::get('/create','machineController@createChannels');
 });
 
@@ -41,7 +43,3 @@ Route::namespace("Api")->prefix('website')->group(function(){
     Route::post('/forgetAccount',"websiteController@forgetAccount");
 });
 
-
-Route::namespace("Api")->prefix('cash')->group(function(){
-    Route::post("/linePay","cashFlowController@Linepay");
-});
