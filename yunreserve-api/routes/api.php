@@ -43,3 +43,6 @@ Route::namespace("Api")->prefix('website')->group(function(){
     Route::post('/forgetAccount',"websiteController@forgetAccount");
 });
 
+Route::namespace("Api")->prefix('admin')->group(function(){
+    Route::get('/viewChannels', "adminController@viewChannels");
+});
