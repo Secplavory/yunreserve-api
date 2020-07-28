@@ -16,10 +16,10 @@ class CreateMembersTable extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
             $table->string('member_name', 10);
-            $table->string('member_account', 18)->unique();
-            $table->string('member_password', 64);
-            $table->string('member_email', 128)->unique();
-            $table->string('member_phone', 10)->unique();
+            $table->string('member_account', 15);
+            $table->string('member_password', 15);
+            $table->string('member_email', 64);
+            $table->string('member_phone', 10);
             $table->string('member_bankCode', 3);
             $table->string('member_bankAccount', 20);
             $table->string('verify',1);

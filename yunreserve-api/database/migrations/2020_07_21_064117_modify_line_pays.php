@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChannelsTable extends Migration
+class ModifyLinePays extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateChannelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('channels', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->integer('product_id');
+        Schema::table('line_pays', function (Blueprint $table) {
+            $table->dropColumn('method_id');
+            $table->integer('linepayMethod_id');
         });
     }
 
@@ -27,6 +26,6 @@ class CreateChannelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channels');
+        //
     }
 }

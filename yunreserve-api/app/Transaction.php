@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     //
-    protected $fillable = ['buyer_id', 'product_id'];
+    protected $fillable = ['id','product_name', 'product_price','member_id'];
 
-    public function buyer(){
+    public function member()
+    {
         return $this->belongsTo('App\Member');
     }
-    public function product(){
-        return $this->belongsTo('App\Product');
-    }
+
 }

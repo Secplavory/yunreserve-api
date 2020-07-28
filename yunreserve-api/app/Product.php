@@ -17,8 +17,4 @@ class Product extends Model
     {
         return $this->hasOne('App\Channel');
     }
-    public function transaction()
-    {
-        return $this->hasOne("App\Transaction");
-    }
 }

@@ -92,8 +92,10 @@ class machineController extends Controller
         if(strcmp($securityCode, "OFA82497653@")==0){
             $channelId = $request->input('channelId');
             $channel = Channel::find($channelId);
+            $product = $channel->product;
             $channel->product_id = 0;
             $channel->save();
+            $product->delete();
             return "true";
         }else{
             return "false";
@@ -163,9 +165,12 @@ class machineController extends Controller
         $channel->product_id = "0";
         $channel->save();
         Transaction::create([
-            "product_id" => $product->id
+            "product_name"=>$product->product_name,
+            "product_price"=>$product->product_price,
+            "member_id"=>$product->member_id
         ]);
         $this->selled_notify($product);
+        $product->delete();
         return "true";
     }
 
@@ -255,9 +260,12 @@ class machineController extends Controller
             $ch_box->product_id = "0";
             $ch_box->save();
             Transaction::create([
-                "product_id" => $product->id
+                "product_name"=>$product->product_name,
+                "product_price"=>$product->product_price,
+                "member_id"=>$product->member_id
             ]);
             $this->selled_notify($product);
+            $product->delete();
         }
         return $response["returnCode"];
     }
