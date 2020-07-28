@@ -16,15 +16,13 @@ class adminController extends Controller
         foreach($channels as $channel){
             if($channel->product_id != "0"){
                 $product_name = $channel->product->product_name;
-            }else{
-                $product_name = "---";
+                array_push($ch_arr, [
+                    "id"=>$channel->id,
+                    "product_name"=>$product_name,
+                    "updated_at"=>$channel->updated_at->format("Y.m.d"),
+                    "recalled_at"=>$channel->updated_at->parse("next sunday")->format('Y.m.d')
+                ]);
             }
-            array_push($ch_arr, [
-                "id"=>$channel->id,
-                "product_name"=>$product_name,
-                "updated_at"=>$channel->updated_at->format("Y.m.d"),
-                "recalled_at"=>$channel->updated_at->parse("next sunday")->format('Y.m.d')
-            ]);
         }
         $ch_arr = json_encode($ch_arr);
 
