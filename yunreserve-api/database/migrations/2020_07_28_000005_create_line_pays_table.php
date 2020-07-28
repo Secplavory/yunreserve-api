@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChannelsTable extends Migration
+class CreateLinePaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class CreateChannelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('channels', function (Blueprint $table) {
+        Schema::create('line_pays', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('status', 1);
+            $table->string('returnCode', 4);
+            $table->string('returnMessage', 100);
+            $table->string('transactionId', 19);
+            $table->string('orderId', 100);
+            $table->string('transactionDate', 20);
+            $table->string('balance', 38);
             $table->timestamps();
         });
     }
@@ -27,6 +32,6 @@ class CreateChannelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('channels');
+        Schema::dropIfExists('line_pays');
     }
 }
