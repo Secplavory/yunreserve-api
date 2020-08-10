@@ -44,5 +44,9 @@ Route::namespace("Api")->prefix('website')->group(function(){
 });
 
 Route::namespace("Api")->prefix('admin')->group(function(){
-    Route::get('/viewChannels', "adminController@viewChannels");
+    Route::post('/viewChannels', "adminController@viewChannels");
+    Route::post('/viewHistory', "adminController@viewHistory");
+    Route::post('/viewMember', "adminController@viewMember");
+    Route::post('/viewTransfer', "adminController@viewTransfer");
+    Route::post('/login', "adminController@login");
 });
