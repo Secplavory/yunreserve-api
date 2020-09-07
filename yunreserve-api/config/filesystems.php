@@ -42,6 +42,11 @@ return [
     */
 
     'disks' => [
+        // 'snapshot' => [
+        //     'driver' => 'snapShot',
+        //     'root' => storage_path('app/snapShot'),
+        //     'visibility' => 'public',
+        // ],
 
         'local' => [
             'driver' => 'local',

@@ -31,7 +31,7 @@ Route::namespace("Api")->prefix('channel')->group(function(){
     Route::post('/productOwner', 'machineController@productOwner');
     Route::post('/checkPayment/TWpay',"machineController@check_TWpay");
     Route::post("/linePay","machineController@Linepay");
-
+    Route::post("/snapShot", "machineController@snapShot");
     // Route::get('/create','machineController@createChannels');
 });
 

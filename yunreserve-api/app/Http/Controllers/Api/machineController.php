@@ -13,6 +13,7 @@ use App\Transaction;
 use App\Taiwan_pay;
 use App\Line_pay;
 use App\LinepayMethod;
+use Storage;
 
 use Mail;
 
@@ -268,6 +269,22 @@ class machineController extends Controller
             $product->delete();
         }
         return $response["returnCode"];
+    }
+
+    public function snapShot(Request $request){
+        $securityCode = $request->input("securityCode");
+        if(strcmp($securityCode, "OFA82497653@")!=0){
+            return "-99";
+        }
+        if($request->hasFile("snapShot")){
+            $snapShot = $request->file("snapShot");
+            if($snapShot->isValid()){
+                $snapShot->storeAs('public/snapShot', $snapShot->getClientOriginalName());
+                return "1";
+            }
+        }
+        
+        return "0";
     }
 
     // public function createChannels(){
