@@ -93,11 +93,23 @@ class adminController extends Controller
             ])->get();
         $transfers = [];
         foreach($transactions as $transaction){
+            if($transaction->product_price<100){
+                $accountPayable = 10;
+            }else
+            if($transaction->product_price<1000){
+                $accountPayable = $transaction->product_price * 0.1;
+            }else{
+                $accountPayable = ($transaction->product_price-1000)*0.05 + 100;
+            }
+            $accountPayable = floor($accountPayable);
             array_push($transfers, [
                 "id"=>$transaction->id,
                 "product_name"=>$transaction->product_name,
                 "product_price"=>$transaction->product_price,
+                "accountPayable"=>$accountPayable,
                 "member_account"=>$transaction->member->member_account,
+                "member_bankCode"=>$transaction->member->member_bankCode,
+                "member_bankAccount"=>$transaction->member->member_bankAccount,
                 "selled_at"=>$transaction->updated_at->format("Y.m.d")
             ]);
         }

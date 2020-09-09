@@ -25,6 +25,7 @@ Route::namespace("Api")->prefix('channel')->group(function(){
     Route::get('/getChangeMemberInfoQRcode', 'machineController@getChangeMemberInfoQRcode');
     Route::get('/getForgetMemberQRcode', 'machineController@getForgetMemberQRcode');
     Route::get('/getContractQRcode', 'machineController@getContractQRcode');
+    Route::get('/getAdminHandler', 'machineController@getAdminHandler');
     Route::post('/launch', 'machineController@launch');
     Route::post('/login', 'machineController@login');
     Route::post('/recall', 'machineController@recall');
@@ -32,6 +33,7 @@ Route::namespace("Api")->prefix('channel')->group(function(){
     Route::post('/checkPayment/TWpay',"machineController@check_TWpay");
     Route::post("/linePay","machineController@Linepay");
     Route::post("/snapShot", "machineController@snapShot");
+    Route::post("/setAdminHandler", "machineController@setAdminHandler");
     // Route::get('/create','machineController@createChannels');
 });
 

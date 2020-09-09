@@ -13,9 +13,10 @@ use App\Transaction;
 use App\Taiwan_pay;
 use App\Line_pay;
 use App\LinepayMethod;
-use Storage;
 
+use Storage;
 use Mail;
+use DB;
 
 
 class machineController extends Controller
@@ -283,8 +284,27 @@ class machineController extends Controller
                 return "1";
             }
         }
-        
+
         return "0";
+    }
+
+    public function getAdminHandler(Request $request){
+        $handler = DB::select('select * from machine_admin where id = ?', ["1"]);
+        return $handler[0]->handler;
+    }
+
+    public function setAdminHandler(Request $request){
+        $securityCode = $request->input("securityCode");
+        if(strcmp($securityCode, "OFA82497653@")!=0){
+            return "-99";
+        }
+        $handler = $request->input("adminHandler");
+        if(strcmp($handler, "1")==0 || strcmp($handler, "0")==0){
+            DB::update('update machine_admin set handler = ? where id = 1', [$handler]);
+            return "1";
+        }else{
+            return "0";
+        }
     }
 
     // public function createChannels(){
